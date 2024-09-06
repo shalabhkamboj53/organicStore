@@ -69,7 +69,7 @@ const ProductData:productDetails = [
         "id": '5',
         "img": "https://websitedemos.net/organic-shop-02/wp-content/uploads/sites/465/2018/06/orage-juice-kariz.jpg",
         "productName": "Fresh Orange Juice",
-        "category": "Juice",
+        "category": "Juices",
         "rate": 18,
         "onSale": false,
         "saleRate": 15,
