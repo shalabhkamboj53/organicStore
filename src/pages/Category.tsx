@@ -13,6 +13,7 @@ const Category = () => {
     const [Search, setSearch] = useState<string>('')
     const [FilterByPrice, setFilterByPrice] = useState<number[]>([0, 100])
     const [FilterMinMax, setFilterMinMax] = useState<number[]>([0, 100])
+    const [SearchToggle, setSearchToggle] = useState(false)
 
     useEffect(() => {
         setSearch('')
@@ -38,11 +39,13 @@ const Category = () => {
         return el.category === categoryType
     })
 
-    let categoryMap = categoryList!.filter((el) => {
+    let categoryMap = categoryList
+
+    categoryMap = categoryList!.filter((el) => {
         return Search && Search.length > 0 ? el.productName.toLocaleLowerCase().includes(Search.toLocaleLowerCase()) : el
     })
 
-    categoryMap = categoryList!.filter((el)=>{
+    categoryMap = categoryMap!.filter((el)=>{
         return FilterByPrice[0] <= el.rate && el.rate <= FilterByPrice[1]
     })
     
@@ -57,6 +60,9 @@ const Category = () => {
                     <div className="lg:block hidden border-e-2 border-gray-600 border-opacity-25 py-5 px-10">
                         <div className="flex gap-5 w-full">
                             <input type="text" placeholder="Type here" className="input rounded-none bg-white w-full" value={Search!} onChange={(e) => { setSearch(e.target.value) }} />
+                            {/* <button className="btn bg-green-500 border-none text-white" onClick={searchHandler}>
+                                <i className="bi bi-chevron-right"></i>
+                            </button> */}
                         </div>
                         <div className="mt-10">
                             <h5 className="text-3xl mb-5">Filter by Price</h5>
