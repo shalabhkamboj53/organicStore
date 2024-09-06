@@ -13,7 +13,6 @@ const Category = () => {
     const [Search, setSearch] = useState<string>('')
     const [FilterByPrice, setFilterByPrice] = useState<number[]>([0, 100])
     const [FilterMinMax, setFilterMinMax] = useState<number[]>([0, 100])
-    const [SearchToggle, setSearchToggle] = useState(false)
 
     useEffect(() => {
         setSearch('')
