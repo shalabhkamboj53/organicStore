@@ -1,7 +1,8 @@
-import { useContext, useEffect, useMemo, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { AllContext } from "../../context/AllContexts"
 import ProductComp from "../components/ProductComp"
+//@ts-ignore
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 
