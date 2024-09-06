@@ -30,6 +30,7 @@ type CartContextType = {
     CartAmount: number;
     CartToLocatStorage: (data:CartType) => void;
     ProductDataState: productDetails;
+    CartQuantity: number;
 };
 
 export const AllContext = createContext<CartContextType | undefined>(undefined);

@@ -94,7 +94,7 @@ const CartComp = ({ CartToggler }: any) => {
                                     </div>
                                     <div>
                                         <span>
-                                            Rs. {CartAmount}
+                                            $ {CartAmount}
                                         </span>
                                     </div>
                                 </div>

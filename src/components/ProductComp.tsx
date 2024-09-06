@@ -21,9 +21,9 @@ const ProductComp = ({ el } : props) => {
                 <h4 className="text-xl mt-1">{el.productName}</h4>
                 <p className="mt-1"><i className="bi bi-star"></i><i className="bi bi-star"></i><i className="bi bi-star"></i><i className="bi bi-star"></i><i className="bi bi-star"></i></p>
                 <p className="text-sm mt-1 font-semibold">{el.onSale ? (
-                    <><s className="text-gray-500 me-2">Rs. ${el.rate}</s><span>Rs. ${el.saleRate}</span></>
+                    <><s className="text-gray-500 me-2">$ {el.rate}</s><span>$ {el.saleRate}</span></>
                 ) : (
-                    <span>Rs. ${el.rate}</span>
+                    <span>$ {el.rate}</span>
                 )}</p>
             </div>
         </Link>

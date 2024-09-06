@@ -16,27 +16,22 @@ const Category = () => {
         return el.onSale === true
     })
 
-    console.log(categoryMap);
-    
-
   return (
     <div className="bg-gray-100">
         <div className="xl:w-[80%] px-10 xl:px-auto md:mx-auto">
             <div className="grid lg:grid-cols-3 py-12">
                 <div className="lg:block hidden border-e-2 border-gray-600 border-opacity-25 py-5 px-10">
-                    <div className="gap-5 flex">
-                        <div>
-                            <input type="text" placeholder="Type here" className="input input-bordered rounded-none bg-white w-52" />
-                        </div>
-                        <div>
+                    <div className="flex gap-5 w-full">
+                            <input type="text" placeholder="Type here" className="input rounded-none bg-white w-full" />
                             <button className="btn btn-success"><i className="bi bi-chevron-right"></i></button>
-                        </div>
                     </div>
                     <div className=" mt-20">
                         {
                             saleProductsMap?.slice(0, 3)?.map((el, id)=>{
                                 return (
-                                    <ProductComp el = {el} key={id} />
+                                    <div className="mb-8">
+                                        <ProductComp el = {el} key={id} />
+                                    </div>
                                 )
                             })
                         }

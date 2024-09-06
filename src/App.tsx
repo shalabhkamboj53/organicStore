@@ -59,10 +59,21 @@ const App = () => {
     return 0
   }, [Cart])
 
+  let CartQuantity = useMemo(() => {
+    let sum = 0
+    if (Cart.items) {
+      Cart.items.forEach((el)=>{
+        sum += el.quantity
+      })
+      return sum
+    }
+    return 0
+  }, [Cart])
+
 
   return (
     <div>
-      <AllContext.Provider value={{Cart, setCart, CartAmount, CartToLocatStorage, ProductDataState}}>
+      <AllContext.Provider value={{Cart, setCart, CartAmount, CartToLocatStorage, ProductDataState, CartQuantity }}>
         <BrowserRouter>
           <Navbar />
           <Routes>

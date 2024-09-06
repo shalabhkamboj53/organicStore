@@ -13,7 +13,7 @@ const Navbar = () => {
         throw new Error('Cannot Fetch Cart');
     }
 
-    var { CartAmount } = context
+    var { CartAmount, CartQuantity } = context
   return (
     <div className='w-full px-10 py-5 '>
         <div className='flex justify-between items-center'>
@@ -48,7 +48,12 @@ const Navbar = () => {
                         if(CartToggler.current != null) {
                             (CartToggler.current as HTMLElement).hidden = !(CartToggler.current as HTMLElement).hidden;
                         }
-                    }}>{CartAmount} <i className="bi bi-cart3"></i></li>
+                    }}>{CartAmount} &nbsp;
+                    <div className="indicator">
+                        <span className="indicator-item badge bg-green-600 border-none text-white text-[12px]">{CartQuantity}</span>
+                        <i className="bi bi-cart3"></i>
+                    </div>
+                    </li>
                     <li><i className="bi bi-person-fill"></i></li>
                 </ul>
             </div>
