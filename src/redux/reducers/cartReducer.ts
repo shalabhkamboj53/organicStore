@@ -1,4 +1,4 @@
-import { ADD_ITEM, REMOVE_ITEM, SET_CART_AMOUNT, SET_CART_QUANTITY, SYNC_CART_WITH_LOCAL_STORAGE, CartItem, UPDATE_CART } from '../actions/cartActions';
+import { ADD_ITEM, REMOVE_ITEM, SET_CART_AMOUNT, SET_CART_QUANTITY, CartItem, UPDATE_CART } from '../actions/cartActions';
 
 type CartState = {
     items: CartItem[];
@@ -52,21 +52,6 @@ const cartReducer = (state = initialState, action: any): CartState => {
                 ...state,
                 cartQuantity: action.payload,
             };
-        }
-        case SYNC_CART_WITH_LOCAL_STORAGE: {
-            const cartData = localStorage.getItem('OurSiteCartData');
-            if (cartData) {
-                const parsedData = JSON.parse(cartData);
-                const cartAmount = parsedData.items.reduce((sum: number, item: CartItem) => sum + item.quantity * item.rate, 0);
-                const cartQuantity = parsedData.items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
-                return {
-                    ...state,
-                    items: parsedData.items,
-                    cartAmount,
-                    cartQuantity,
-                };
-            }
-            return state;
         }
         case UPDATE_CART: {
             return {

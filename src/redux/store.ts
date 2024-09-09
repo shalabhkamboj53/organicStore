@@ -1,19 +1,30 @@
-// src/redux/store.ts
 import { combineReducers, legacy_createStore } from 'redux';
 import cartReducer from './reducers/cartReducer';
 import productReducer from './reducers/productReducer';
-// import thunk from 'redux-thunk'; // If you use any async actions
+// @ts-ignore
+import storage from 'redux-persist/lib/storage';
+// @ts-ignore
+import persistReducer from 'redux-persist/es/persistReducer';
+// @ts-ignore
+import persistStore from 'redux-persist/es/persistStore';
+
+const persistConfig = {
+    key: 'root',
+    storage,
+};
 
 const rootReducer = combineReducers({
     cart: cartReducer,
     products: productReducer,
 });
 
-const store = legacy_createStore(rootReducer);
 
-// Dispatch SYNC_CART_WITH_LOCAL_STORAGE action to initialize the cart state from localStorage
-store.dispatch({ type: 'SYNC_CART_WITH_LOCAL_STORAGE' });
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = legacy_createStore(persistedReducer);
+
+const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export default store;
+export { store, persistor };

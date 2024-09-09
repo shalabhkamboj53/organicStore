@@ -40,10 +40,6 @@ const App: React.FC = () => {
     return 0
   }, [cart])
 
-  useEffect(() => {
-    localStorage.setItem('OurSiteCartData', JSON.stringify(cart));
-  }, [cart]);
-
   useEffect(() => {    
     dispatch(setCartAmount(CartAmount))
   }, [CartAmount])
