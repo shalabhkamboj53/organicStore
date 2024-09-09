@@ -1,6 +1,5 @@
 import GreenBtn from "./GreenBtn"
 
-
 const Hero = () => {
     const feature : { title:string, body:string, icon:string }[] = [
         {

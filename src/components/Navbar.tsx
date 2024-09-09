@@ -1,66 +1,62 @@
-import { Link } from 'react-router-dom'
-import NavData from '../../JsonData/NavData'
-import { useContext, useRef } from 'react'
-import { AllContext } from '../../context/AllContexts'
-import CartComp from './CartComp'
+import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store'; 
+import NavData from '../../JsonData/NavData';
+import CartComp from './CartComp';
 
-const Navbar = () => {
-    let context = useContext(AllContext)
+const Navbar: React.FC = () => {
+    const cartAmount = useSelector((state: RootState) => state.cart.cartAmount); 
+    const cartQuantity = useSelector((state: RootState) => state.cart.cartQuantity); 
 
-    const CartToggler:React.MutableRefObject<null> = useRef(null)
+    const CartToggler = useRef<HTMLDivElement | null>(null);
 
-    if (!context) {
-        throw new Error('Cannot Fetch Cart');
-    }
-
-    var { CartAmount, CartQuantity } = context
-  return (
-    <div className='w-full px-10 py-5 '>
-        <div className='flex justify-between items-center'>
-            <div className=' flex items-center'>
-                <Link to={'/'}>
-                    <img src={NavData.navImg} className='w-[150px] me-10' alt="" />
-                </Link>
-                <ul className='justify-normal md:flex hidden'>
-                    {
-                        NavData.navLinks.map((el, id)=>{
-                            return <li key={id} className='me-10'>
+    return (
+        <div className='w-full px-10 py-5'>
+            <div className='flex justify-between items-center'>
+                <div className='flex items-center'>
+                    <Link to={'/'}>
+                        <img src={NavData.navImg} className='w-[150px] me-10' alt="Site Logo" />
+                    </Link>
+                    <ul className='justify-normal md:flex hidden'>
+                        {NavData.navLinks.map((el, id) => (
+                            <li key={id} className='me-10'>
                                 <Link to={el.link}>{el.title}</Link>
                             </li>
-                        })
-                    }
-                </ul>
+                        ))}
+                    </ul>
+                </div>
+                
+                <div>
+                    <ul className='md:flex hidden justify-normal gap-9'>
+                        <li>
+                            <Link to={'/about'}>
+                                About
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to={'/contact'}>
+                                Contact
+                            </Link>
+                        </li>
+                        <li className='text-green-600 cursor-pointer' onClick={() => {
+                            if (CartToggler.current) {
+                                CartToggler.current.hidden = !CartToggler.current.hidden;
+                            }
+                        }}>
+                            { cartAmount } &nbsp;
+                            <div className="indicator">
+                                <span className="indicator-item badge bg-green-600 border-none text-white text-[12px]">{ cartQuantity }</span>
+                                <i className="bi bi-cart3"></i>
+                            </div>
+                        </li>
+                        <li><i className="bi bi-person-fill"></i></li>
+                    </ul>
+                </div>
             </div>
-            
-            <div>
-                <ul className='md:flex hidden justify-normal gap-9'>
-                    <li>
-                        <Link to={'/about'}>
-                            About
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={'/contact'}>
-                            Contact
-                        </Link>
-                    </li>
-                    <li className='text-green-600 cursor-pointer' onClick={()=>{
-                        if(CartToggler.current != null) {
-                            (CartToggler.current as HTMLElement).hidden = !(CartToggler.current as HTMLElement).hidden;
-                        }
-                    }}>{CartAmount} &nbsp;
-                    <div className="indicator">
-                        <span className="indicator-item badge bg-green-600 border-none text-white text-[12px]">{CartQuantity}</span>
-                        <i className="bi bi-cart3"></i>
-                    </div>
-                    </li>
-                    <li><i className="bi bi-person-fill"></i></li>
-                </ul>
-            </div>
+            <CartComp CartToggler={CartToggler} />
         </div>
-        <CartComp CartToggler={CartToggler} />
-    </div>
-  )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

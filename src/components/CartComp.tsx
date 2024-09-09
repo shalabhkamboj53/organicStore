@@ -1,45 +1,23 @@
-import { AllContext } from "../../context/AllContexts"
-import { useContext } from "react"
-import GreenBtn from "./GreenBtn"
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../redux/store';
+import { removeItem } from '../redux/actions/cartActions';
+import GreenBtn from './GreenBtn';
 
-type CartType = {
-    items: {
-        img: string,
-        rate: number,
-        quantity: number,
-        productName: string,
-        id: string,
-    }[],
+interface CartCompProps {
+    CartToggler: React.RefObject<HTMLDivElement>;
 }
 
-const CartComp = ({ CartToggler }: any) => {
-    let context = useContext(AllContext)
+const CartComp: React.FC<CartCompProps> = ({ CartToggler }) => {
+    const dispatch = useDispatch();
+    const Cart = useSelector((state: RootState) => state.cart.items);
+    const CartAmount = useSelector((state: RootState) =>
+        state.cart.items.reduce((total, item) => total + item.quantity * item.rate, 0)
+    );
 
-    if (!context) {
-        throw Error("Error  fetching the Cart")
-    }
-
-    let { Cart, setCart, CartAmount, CartToLocatStorage } = context
-
-    const editCardHandler = (el: {
-        img: string,
-        rate: number,
-        quantity: number,
-        productName: string,
-        id: string
-    }) => {
-        let updatedCart: CartType = {
-            items: Cart.items.filter((data) => {
-                if (data.id === el.id) {
-                    return
-                } else {
-                    return data
-                }
-            })
-        }
-        setCart(updatedCart)
-        CartToLocatStorage(updatedCart)
-    }
+    const editCardHandler = (id: string) => {
+        dispatch(removeItem(id));
+    };
 
     return (
         <div className="relative">
@@ -53,39 +31,33 @@ const CartComp = ({ CartToggler }: any) => {
                                         Shopping Cart
                                     </div>
                                     <div>
-                                        <i className="bi bi-x-lg hover:cursor-pointer" onClick={() => { CartToggler.current.hidden = !CartToggler.current.hidden }}></i>
+                                        <i className="bi bi-x-lg hover:cursor-pointer" onClick={() => { CartToggler.current!.hidden = !CartToggler.current!.hidden }}></i>
                                     </div>
                                 </div>
                             </div>
                             <hr />
-
                             <div className="mx-5 my-5">
                                 {
-                                    Cart.items ? Cart.items.map((el, id) => {
-                                        return (
-                                            <div className="flex justify-between" key={id}>
-                                                <div className="flex gap-3">
-                                                    <img src={el.img} className="w-16" alt="" />
-                                                    <div>
-                                                        <h5>{el.productName}</h5>
-                                                        <p>
-                                                            <span>{el.quantity}</span> x <span>{el.rate}</span>
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                    Cart.length > 0 ? Cart.map((el, id) => (
+                                        <div className="flex justify-between" key={id}>
+                                            <div className="flex gap-3">
+                                                <img src={el.img} className="w-16" alt="" />
                                                 <div>
-                                                    <i className="bi bi-x-circle" onClick={() => {
-                                                        editCardHandler(el)
-                                                    }}></i>
+                                                    <h5>{el.productName}</h5>
+                                                    <p>
+                                                        <span>{el.quantity}</span> x <span>{el.rate}</span>
+                                                    </p>
                                                 </div>
                                             </div>
-                                        )
-                                    }) : <div className="w-full h-full flex justify-center items-center">
+                                            <div>
+                                                <i className="bi bi-x-circle" onClick={() => editCardHandler(el.id)}></i>
+                                            </div>
+                                        </div>
+                                    )) : <div className="w-full h-full flex justify-center items-center">
                                         No products in the cart.
                                     </div>
                                 }
                             </div>
-
                             <div className="mx-5 py-5 absolute bottom-0 left-0 right-0">
                                 <hr />
                                 <div className="flex justify-between py-3">
@@ -93,9 +65,7 @@ const CartComp = ({ CartToggler }: any) => {
                                         <span>Subtotal: </span>
                                     </div>
                                     <div>
-                                        <span>
-                                            $ {CartAmount}
-                                        </span>
+                                        <span>$ {CartAmount}</span>
                                     </div>
                                 </div>
                                 <hr />
@@ -108,7 +78,7 @@ const CartComp = ({ CartToggler }: any) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default CartComp
+export default CartComp;

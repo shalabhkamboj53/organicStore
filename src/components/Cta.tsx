@@ -1,6 +1,5 @@
 import GreenBtn from "./GreenBtn"
 
-
 const Cta = () => {
     const ctaBoxData : {title: string, body: string, link: string, img: string}[] = [
         {

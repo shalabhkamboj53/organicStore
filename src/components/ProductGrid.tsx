@@ -1,6 +1,5 @@
 import ProductComp from "./ProductComp"
 
-
 type BestSelling = {
     details : {
         title: string,

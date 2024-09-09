@@ -1,95 +1,71 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import RouteMap from '../RouteMap.ts'
-import Navbar from './components/Navbar.tsx'
-import { useEffect, useMemo, useState } from 'react'
-import { AllContext } from '../context/AllContexts.ts'
-import Footer from './components/Footer.tsx'
-import ProductData from '../JsonData/ProductData.ts'
+import React, { useEffect, useMemo } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './redux/store';
+import RouteMap from '../RouteMap.ts';
+import Navbar from './components/Navbar.tsx';
+import Footer from './components/Footer.tsx';
+import ProductData from '../JsonData/ProductData.ts';
+import { setProducts } from './redux/actions/productActions';
+import { syncCartWithLocalStorage, setCartAmount, setCartQuantity } from './redux/actions/cartActions';
 
-type CartType = {
-  items: {
-    img:string,
-    rate: number,
-    quantity: number,
-    productName: string,
-    id: string,
-  }[],
-}
-
-type productDetails = {
-  id: string,
-  img: string,
-  productName: string,
-  category: string,
-  rate: number,
-  onSale: true | false,
-  saleRate: number,
-  description: string,
-  stock: number
-  feature: boolean,
-  topSeller: boolean
-}[]
-
-const App = () => {
-  const [ProductDataState, setProductDataState] = useState<productDetails>([])
-
-  const [Cart, setCart] = useState<CartType>({items:[]})
-
+const App: React.FC = () => {
+  const dispatch = useDispatch();
+  const cart = useSelector((state: RootState) => state.cart);
+  
   useEffect(() => {
-    let CartLocalData:string | CartType | null = localStorage.getItem('OurSiteCartData')
-    if(CartLocalData) {
-      let CartData:CartType = JSON.parse(CartLocalData)
-      setCart(CartData)
-    }
-    setProductDataState(ProductData)
-  }, [])
-
-  let CartToLocatStorage = (data:CartType)=> {
-    localStorage.setItem('OurSiteCartData', JSON.stringify(data))
-  }
-
+    dispatch(syncCartWithLocalStorage());
+    dispatch(setProducts(ProductData));
+  }, [dispatch]);
+  
   let CartAmount = useMemo(() => {
-    let sum = 0
-    if (Cart.items) {
-      Cart.items.forEach((el)=>{
+  let sum = 0
+    if (cart.items) {
+      cart.items.forEach((el)=>{
         sum += el.quantity * el.rate
       })
       return sum
     }
     return 0
-  }, [Cart])
+  }, [cart])
 
   let CartQuantity = useMemo(() => {
     let sum = 0
-    if (Cart.items) {
-      Cart.items.forEach((el)=>{
+    if (cart.items) {
+      cart.items.forEach((el)=>{
         sum += el.quantity
       })
       return sum
     }
     return 0
-  }, [Cart])
+  }, [cart])
+
+  useEffect(() => {
+    localStorage.setItem('OurSiteCartData', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {    
+    dispatch(setCartAmount(CartAmount))
+  }, [CartAmount])
+
+  useEffect(() => {
+    dispatch(setCartQuantity(CartQuantity))
+  }, [CartQuantity])
+  
+  
 
 
   return (
-    <div>
-      <AllContext.Provider value={{Cart, setCart, CartAmount, CartToLocatStorage, ProductDataState, CartQuantity }}>
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            {
-              RouteMap.map((el, id)=>{
-                return (
-                  <Route path={el.path} key={id} Component={el.page} />
-                )
-              })
-            }
-          </Routes>
-          <Footer />
-        </BrowserRouter>
-      </AllContext.Provider>
-    </div>
-  )
-}
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          {RouteMap.map((el, id) => (
+            <Route path={el.path} key={id} Component={el.page} />
+          ))}
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+  );
+};
 
-export default App
+export default App;
