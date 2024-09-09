@@ -42,10 +42,7 @@ const Buy: React.FC = () => {
                 ]
             };
         }
-
-        console.log(updatedCart);
         
-
         dispatch(updateCart(updatedCart));
     };
 

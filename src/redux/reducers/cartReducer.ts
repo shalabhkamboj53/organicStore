@@ -1,4 +1,4 @@
-import { ADD_ITEM, REMOVE_ITEM, SET_CART_AMOUNT, SET_CART_QUANTITY, CartItem, UPDATE_CART } from '../actions/cartActions';
+import { REMOVE_ITEM, CartItem, UPDATE_CART } from '../actions/cartActions';
 
 type CartState = {
     items: CartItem[];
@@ -14,20 +14,6 @@ const initialState: CartState = {
 
 const cartReducer = (state = initialState, action: any): CartState => {
     switch (action.type) {
-        case ADD_ITEM: {
-            const newItem = action.payload;
-            const existingItem = state.items.find((item) => item.id === newItem.id);
-            if (existingItem) {
-                existingItem.quantity += newItem.quantity;
-            } else {
-                state.items.push(newItem);
-            }
-            return {
-                ...state,
-                cartQuantity: state.cartQuantity + newItem.quantity,
-                cartAmount: state.cartAmount + newItem.rate * newItem.quantity,
-            };
-        }
         case REMOVE_ITEM: {
             const id = action.payload;
             const itemToRemove = state.items.find((item) => item.id === id);
@@ -41,22 +27,21 @@ const cartReducer = (state = initialState, action: any): CartState => {
             }
             return state;
         }
-        case SET_CART_AMOUNT: {
-            return {
-                ...state,
-                cartAmount: action.payload,
-            };
-        }
-        case SET_CART_QUANTITY: {
-            return {
-                ...state,
-                cartQuantity: action.payload,
-            };
-        }
         case UPDATE_CART: {
+            let amount:number = initialState.cartAmount
+            action.payload.items.forEach((el:any)=>{
+                amount += el.quantity*el.rate
+            })
+            let quantity:number = initialState.cartQuantity
+            action.payload.items.forEach((el:any)=>{
+                quantity += el.quantity
+            })
+            
             return {
                 ...state,
-                items: action.payload.items
+                items: action.payload.items,
+                cartAmount: amount,
+                cartQuantity: quantity
             };
         }
         default:
