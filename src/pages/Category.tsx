@@ -99,7 +99,6 @@ const Category: React.FC = () => {
                             <div>
                                 <select className="select bg-transparent">
                                     <option>Default Sort</option>
-                                    <option>Sort by popularity</option>
                                     <option>Sort by price low to high</option>
                                     <option>Sort by price high to low</option>
                                 </select>

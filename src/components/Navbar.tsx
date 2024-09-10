@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
                     <Link to={'/'}>
                         <img src={NavData.navImg} className='w-[150px] me-10' alt="Site Logo" />
                     </Link>
-                    <ul className='justify-normal md:flex hidden'>
+                    <ul className='justify-normal lg:flex hidden'>
                         {NavData.navLinks.map((el, id) => (
                             <li key={id} className='me-10'>
                                 <Link to={el.link}>{el.title}</Link>
@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
                 </div>
                 
                 <div>
-                    <ul className='md:flex hidden justify-normal gap-9'>
+                    <ul className='lg:flex hidden justify-normal gap-9'>
                         <li>
                             <Link to={'/about'}>
                                 About
@@ -53,7 +53,28 @@ const Navbar: React.FC = () => {
                         <li><i className="bi bi-person-fill"></i></li>
                     </ul>
                 </div>
+
+                <div className='lg:hidden block'>
+                    <ul className='flex justify-normal gap-14'>
+                        <li className='text-green-600 cursor-pointer' onClick={() => {
+                            if (CartToggler.current) {
+                                CartToggler.current.hidden = !CartToggler.current.hidden;
+                            }
+                        }}>
+                            { cartAmount } &nbsp;
+                            <div className="indicator">
+                                <span className="indicator-item badge bg-green-600 border-none text-white text-[12px]">{ cartQuantity }</span>
+                                <i className="bi bi-cart3"></i>
+                            </div>
+                        </li>
+
+                        <li>
+                            <i className="bi bi-list text-2xl cursor-pointer"></i>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
             <CartComp CartToggler={CartToggler} />
         </div>
     );

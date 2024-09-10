@@ -1,4 +1,5 @@
-import { combineReducers, legacy_createStore } from 'redux';
+import { combineReducers, legacy_createStore, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import cartReducer from './reducers/cartReducer';
 import productReducer from './reducers/productReducer';
 // @ts-ignore
@@ -7,6 +8,7 @@ import storage from 'redux-persist/lib/storage';
 import persistReducer from 'redux-persist/es/persistReducer';
 // @ts-ignore
 import persistStore from 'redux-persist/es/persistStore';
+import rootSaga from './saga';
 
 const persistConfig = {
     key: 'root',
@@ -18,10 +20,13 @@ const rootReducer = combineReducers({
     products: productReducer,
 });
 
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = legacy_createStore(persistedReducer);
+const sagaMiddleware = createSagaMiddleware();
+
+const store = legacy_createStore(persistedReducer, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(rootSaga);
 
 const persistor = persistStore(store);
 
