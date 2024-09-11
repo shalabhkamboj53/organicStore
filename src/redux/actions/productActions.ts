@@ -1,5 +1,6 @@
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const FETCH_PRODUCT = 'FETCH_PRODUCT';
 
 export interface Product {
     id: string;
@@ -19,6 +20,10 @@ export const setProducts = (products: Product[]) => ({
     type: SET_PRODUCTS,
     payload: products,
 });
+
+export const fetchProducts = () => ({
+    type: FETCH_PRODUCT
+})
 
 export const updateProduct = (product: Product) => ({
     type: UPDATE_PRODUCT,

@@ -1,4 +1,4 @@
-import { SET_PRODUCTS, UPDATE_PRODUCT, Product } from '../actions/productActions';
+import { SET_PRODUCTS, UPDATE_PRODUCT, Product, FETCH_PRODUCT } from '../actions/productActions';
 
 type ProductState = {
     products: Product[];
@@ -24,6 +24,11 @@ const productReducer = (state = initialState, action: any): ProductState => {
                     product.id === updatedProduct.id ? updatedProduct : product
                 ),
             };
+        }
+        case FETCH_PRODUCT: {
+            return {
+                ...state,
+            }
         }
         default:
             return state;
