@@ -11,9 +11,7 @@ interface CartCompProps {
 const CartComp: React.FC<CartCompProps> = ({ CartToggler }) => {
     const dispatch = useDispatch();
     const Cart = useSelector((state: RootState) => state.cart.items);
-    const CartAmount = useSelector((state: RootState) =>
-        state.cart.items.reduce((total, item) => total + item.quantity * item.rate, 0)
-    );
+    const CartAmount = useSelector((state: RootState) =>state.cart.cartAmount);
 
     const editCardHandler = (id: string) => {
         dispatch(removeItem(id));

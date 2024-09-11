@@ -21,11 +21,31 @@ export const setProducts = (products: Product[]) => ({
     payload: products,
 });
 
-export const fetchProducts = () => ({
-    type: FETCH_PRODUCT
-})
-
 export const updateProduct = (product: Product) => ({
     type: UPDATE_PRODUCT,
     payload: product,
 });
+
+export const fetchProducts = () => {
+    return async (dispatch: any) => {    
+        try {
+            console.log("Started API fetch");
+            const response = await fetch('https://run.mocky.io/v3/f28c3a5d-2e16-4397-89c0-9ccde50a42e0');
+            console.log("API Fetched");
+            
+            if (!response.ok) {
+                console.log("API response status false");
+            }
+
+            const products = await response.json();
+            console.log("Data fetched by API: ", products);
+
+            console.log("Started dispatching data to store");
+            dispatch(setProducts(products));
+            console.log("API data dispatched to store");
+            
+        } catch (error) {
+            console.error('Failed to fetch products', error);
+        }
+    };
+};

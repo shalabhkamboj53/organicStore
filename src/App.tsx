@@ -5,10 +5,11 @@ import Navbar from './components/Navbar.tsx';
 import Footer from './components/Footer.tsx';
 import { useDispatch } from 'react-redux';
 import { fetchProducts } from './redux/actions/productActions.ts';
+import { AppDispatch } from './redux/store.ts';
 
 const App: React.FC = () => {  
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
     dispatch(fetchProducts())
