@@ -21,7 +21,6 @@ function* watchFetchProducts() {
     yield takeEvery(FETCH_PRODUCT, fetchProductsSaga);
 }
 
-// Root saga
 export default function* rootSaga() {
     yield all([
         fork(watchFetchProducts),
