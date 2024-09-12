@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 //@ts-ignore
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
 import ProductComp from '../components/ProductComp';
+import { onSaleProducts, selectGroceries, selectJuices, selectMaxPrice, selectMinPrice, selectProducts, useAppSelector } from '../redux/store';
 
 interface Product {
     id: string;
@@ -22,25 +22,33 @@ interface Product {
 
 const Category: React.FC = () => {
     const { categoryType } = useParams<{ categoryType: string }>();
-    const ProductDataState = useSelector((state: any) => state.products.products);
+
     const [Search, setSearch] = useState<string>('');
-    const [FilterByPrice, setFilterByPrice] = useState<number[]>([0, 100]);
-    const [FilterMinMax, setFilterMinMax] = useState<number[]>([0, 100]);
+    const [FilterByPrice, setFilterByPrice] = useState<number[]>([useAppSelector(selectMinPrice), useAppSelector(selectMaxPrice)]);
+    const [FilterMinMax] = useState<number[]>([useAppSelector(selectMinPrice), useAppSelector(selectMaxPrice)]);
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         setSearch('');
     }, []);
 
-    useEffect(() => {
-        if (FilterByPrice[0] === 0 && FilterByPrice[1] === 100 && ProductDataState.length > 1) {
-            const sortedProducts = [...ProductDataState].sort((a: Product, b: Product) => a.rate - b.rate);
-            const MinMax = [sortedProducts[0].rate, sortedProducts[sortedProducts.length - 1].rate];
-            setFilterByPrice(MinMax);
-            setFilterMinMax(MinMax);
-        }
-    }, [ProductDataState]);
+    let categoryList
 
-    const categoryList = categoryType === 'Shop' ? ProductDataState : ProductDataState?.filter((el: Product) => el.category === categoryType);
+    switch (categoryType) {
+        case 'Shop':
+            categoryList = useAppSelector(selectProducts);
+            break;
+        case 'Groceries':
+            categoryList = useAppSelector(selectGroceries)
+            break;
+        case 'Juices':
+            categoryList = useAppSelector(selectJuices)
+            break;
+        default:
+            navigate('/404')
+            break
+    }
 
     const filteredProducts = categoryList?.filter((el: Product) => {
         return (
@@ -50,7 +58,7 @@ const Category: React.FC = () => {
         );
     });
 
-    const saleProducts = ProductDataState?.filter((el: Product) => el.onSale);
+    const saleProducts = useAppSelector(onSaleProducts);
 
     return (
         <div className="bg-gray-100">

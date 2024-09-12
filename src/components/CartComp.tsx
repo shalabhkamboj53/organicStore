@@ -1,6 +1,6 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../redux/store';
+import { useDispatch } from 'react-redux';
+import { selectCartAmount, selectCartItems, useAppSelector } from '../redux/store';
 import { removeItem } from '../redux/actions/cartActions';
 import GreenBtn from './GreenBtn';
 
@@ -10,9 +10,9 @@ interface CartCompProps {
 
 const CartComp: React.FC<CartCompProps> = ({ CartToggler }) => {
     const dispatch = useDispatch();
-    const Cart = useSelector((state: RootState) => state.cart.items);
-    const CartAmount = useSelector((state: RootState) =>state.cart.cartAmount);
-
+    const Cart = useAppSelector(selectCartItems);
+    const CartAmount = useAppSelector(selectCartAmount);
+    
     const editCardHandler = (id: string) => {
         dispatch(removeItem(id));
     };

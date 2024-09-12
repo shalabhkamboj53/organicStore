@@ -1,6 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { selectFeaturedProducts, selectTrendingProducts, useAppSelector } from '../redux/store';
 import Cta from '../components/Cta';
 import Hero from '../components/Hero';
 import ProductGrid from '../components/ProductGrid';
@@ -19,16 +18,14 @@ type ProductGridType = {
 };
 
 const Home: React.FC = () => {
-    const productData = useSelector((state: RootState) => state.products.products); 
-
-    const BestSelling: ProductGridType = {
+    const BestSelling:ProductGridType = {
         title: 'Best Selling Products',
-        products: productData?.filter((el) => el.feature) || []
-    };
+        products: useAppSelector(selectFeaturedProducts)
+    }
 
     const TrendingProducts: ProductGridType = {
         title: 'Trending Products',
-        products: productData?.filter((el) => el.topSeller) || []
+        products: useAppSelector(selectTrendingProducts)
     };
 
     return (

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { updateCart } from '../redux/actions/cartActions';
 import ProductComp from '../components/ProductComp';
+import { selectCartItems, selectProducts, useAppSelector } from '../redux/store';
 
 const Buy: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [productQuantity, setProductQuantity] = useState<number>(1);
 
     const dispatch = useDispatch();
-    const productData = useSelector((state: any) => state.products.products);
-    const cart = useSelector((state: any) => state.cart.items);
+    const productData = useAppSelector(selectProducts);
+    const cart = useAppSelector(selectCartItems);
 
     const currentProductData = productData.find((el: any) => el.id === id);
 

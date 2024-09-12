@@ -1,13 +1,12 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store'; 
+import { selectCartAmount, selectCartQuantity, useAppSelector } from '../redux/store'; 
 import NavData from '../../JsonData/NavData';
 import CartComp from './CartComp';
 
 const Navbar: React.FC = () => {
-    const cartAmount = useSelector((state: RootState) => state.cart.cartAmount); 
-    const cartQuantity = useSelector((state: RootState) => state.cart.cartQuantity); 
+    const cartAmount = useAppSelector(selectCartAmount); 
+    const cartQuantity = useAppSelector(selectCartQuantity); 
 
     const CartToggler = useRef<HTMLDivElement | null>(null);
 

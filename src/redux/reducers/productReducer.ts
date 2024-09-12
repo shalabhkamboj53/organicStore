@@ -30,4 +30,6 @@ const productReducer = (state = initialState, action: any): ProductState => {
     }
 };
 
+
+
 export default productReducer;
