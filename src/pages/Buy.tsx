@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateCart } from '../redux/actions/cartActions';
-import ProductComp from '../components/ProductComp';
 import { selectCartItems, selectProducts, useAppSelector } from '../redux/store';
+
+// Lazy load the ProductComp component
+const ProductComp = lazy(() => import('../components/ProductComp'));
 
 const Buy: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -14,7 +16,6 @@ const Buy: React.FC = () => {
     const cart = useAppSelector(selectCartItems);
 
     const currentProductData = productData.find((el: any) => el.id === id);
-
     const relatedProducts = productData.filter((el: any) => el.category === currentProductData?.category);
 
     const addItemsToCart = () => {
@@ -43,9 +44,11 @@ const Buy: React.FC = () => {
                 ]
             };
         }
-        
+
         dispatch(updateCart(updatedCart));
     };
+
+    throw new Error("This is a test error to check the error boundary!");
 
     return (
         <div>
@@ -122,9 +125,11 @@ const Buy: React.FC = () => {
                     <div className="mt-10">
                         <h3 className="text-4xl font-bold">Related Products</h3>
                         <div className="grid md:grid-cols-6 grid-cols-3 gap-10 mt-10">
-                            {relatedProducts?.map((el: any, id: number) => (
-                                <ProductComp el={el} key={id} />
-                            ))}
+                            <Suspense fallback={<div>Loading related products...</div>}>
+                                {relatedProducts?.map((el: any, id: number) => (
+                                    <ProductComp el={el} key={id} />
+                                ))}
+                            </Suspense>
                         </div>
                     </div>
                 </div>

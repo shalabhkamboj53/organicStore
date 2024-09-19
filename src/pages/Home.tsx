@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { selectFeaturedProducts, selectTrendingProducts, useAppSelector } from '../redux/store';
-import Cta from '../components/Cta';
 import Hero from '../components/Hero';
-import ProductGrid from '../components/ProductGrid';
+
+const Cta = lazy(() => import('../components/Cta'));
+const ProductGrid = lazy(() => import('../components/ProductGrid'));
 
 type ProductGridType = {
     title: string,
@@ -18,10 +19,10 @@ type ProductGridType = {
 };
 
 const Home: React.FC = () => {
-    const BestSelling:ProductGridType = {
+    const BestSelling: ProductGridType = {
         title: 'Best Selling Products',
         products: useAppSelector(selectFeaturedProducts)
-    }
+    };
 
     const TrendingProducts: ProductGridType = {
         title: 'Trending Products',
@@ -31,9 +32,11 @@ const Home: React.FC = () => {
     return (
         <div>
             <Hero />
-            <ProductGrid details={BestSelling} />
-            <Cta />
-            <ProductGrid details={TrendingProducts} />
+            <Suspense fallback={<div>Loading...</div>}>
+                <ProductGrid details={BestSelling} />
+                <Cta />
+                <ProductGrid details={TrendingProducts} />
+            </Suspense>
         </div>
     );
 };

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 //@ts-ignore
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
-import ProductComp from '../components/ProductComp';
 import { onSaleProducts, selectGroceries, selectJuices, selectMaxPrice, selectMinPrice, selectProducts, useAppSelector } from '../redux/store';
+
+// Lazy load the ProductComp component
+const ProductComp = lazy(() => import('../components/ProductComp'));
 
 interface Product {
     id: string;
@@ -22,32 +24,31 @@ interface Product {
 
 const Category: React.FC = () => {
     const { categoryType } = useParams<{ categoryType: string }>();
-
     const [Search, setSearch] = useState<string>('');
     const [FilterByPrice, setFilterByPrice] = useState<number[]>([useAppSelector(selectMinPrice), useAppSelector(selectMaxPrice)]);
     const [FilterMinMax] = useState<number[]>([useAppSelector(selectMinPrice), useAppSelector(selectMaxPrice)]);
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         setSearch('');
     }, []);
 
-    let categoryList
+    let categoryList;
 
     switch (categoryType) {
         case 'Shop':
             categoryList = useAppSelector(selectProducts);
             break;
         case 'Groceries':
-            categoryList = useAppSelector(selectGroceries)
+            categoryList = useAppSelector(selectGroceries);
             break;
         case 'Juices':
-            categoryList = useAppSelector(selectJuices)
+            categoryList = useAppSelector(selectJuices);
             break;
         default:
-            navigate('/404')
-            break
+            navigate('/404');
+            break;
     }
 
     const filteredProducts = categoryList?.filter((el: Product) => {
@@ -90,7 +91,9 @@ const Category: React.FC = () => {
                         <div className="mt-20">
                             {saleProducts?.slice(0, 3).map((el: Product, id: number) => (
                                 <div className="mb-8" key={id}>
-                                    <ProductComp el={el} />
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <ProductComp el={el} />
+                                    </Suspense>
                                 </div>
                             ))}
                         </div>
@@ -114,7 +117,11 @@ const Category: React.FC = () => {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 mt-10">
                             {filteredProducts?.map((el: Product, id: number) => (
-                                <ProductComp el={el} key={id} />
+                                <div key={id}>
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <ProductComp el={el} />
+                                    </Suspense>
+                                </div>
                             ))}
                         </div>
                     </div>
