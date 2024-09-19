@@ -36,7 +36,7 @@ const CartComp: React.FC<CartCompProps> = ({ CartToggler }) => {
                             <hr />
                             <div className="mx-5 my-5">
                                 {
-                                    Cart.length > 0 ? Cart.map((el, id) => (
+                                    Cart?.length > 0 ? Cart.map((el, id) => (
                                         <div className="flex justify-between" key={id}>
                                             <div className="flex gap-3">
                                                 <img src={el.img} className="w-16" alt="" />
