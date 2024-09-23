@@ -48,8 +48,6 @@ const Buy: React.FC = () => {
         dispatch(updateCart(updatedCart));
     };
 
-    throw new Error("This is a test error to check the error boundary!");
-
     return (
         <div>
             <div className="bg-[#f8f6f3] py-20">
@@ -76,9 +74,9 @@ const Buy: React.FC = () => {
                                         {currentProductData?.onSale ? (
                                             <span>
                                                 <s className="me-2 text-xl text-gray-500">
-                                                    ${currentProductData.rate}
+                                                    ${currentProductData?.rate}
                                                 </s>
-                                                <span>${currentProductData.saleRate}</span>
+                                                <span>${currentProductData?.saleRate}</span>
                                             </span>
                                         ) : (
                                             <span>$ {currentProductData?.rate}</span>
