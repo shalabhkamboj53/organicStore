@@ -8,7 +8,6 @@ import { useAppDispatch } from './redux/store.ts';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 
 const App: React.FC = () => {  
-
   const dispatch = useAppDispatch()
 
   useEffect(() => {
